@@ -1,0 +1,55 @@
+name: PocketQuant Engine
+
+on:
+  schedule:
+    # Weekdays 17:23 UTC — after the London close. GitHub may start the run a
+    # few minutes late on busy days; that is harmless because the engine uses
+    # the day's completed closing prices.
+    - cron: "23 17 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Run mode"
+        type: choice
+        default: trade
+        options:
+          - trade
+          - backtest
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pocketquant-engine
+  cancel-in-progress: true
+
+jobs:
+  engine:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run PocketQuant
+        env:
+          MODE: "${{ inputs.mode }}"
+          MANUAL: "${{ github.event_name == 'workflow_dispatch' && '1' || '0' }}"
+          BROKER_KEY: ${{ secrets.BROKER_KEY }}
+        run: node engine.mjs
+
+      - name: Save results
+        run: |
+          git config user.name "pocketquant-bot"
+          git config user.email "actions@github.com"
+          git add data
+          if git diff --staged --quiet; then
+            echo "Nothing to save"
+          else
+            git commit -m "engine update $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push
+          fi
