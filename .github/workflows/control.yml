@@ -1,0 +1,70 @@
+name: PocketQuant Controls
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "What do you want to do?"
+        type: choice
+        default: start
+        options:
+          - start
+          - pause
+          - stop
+          - emergency
+          - reset
+          - enable-real-money
+          - disable-real-money
+          - broker-check
+      risk_level:
+        description: "Risk level (keep = leave unchanged)"
+        type: choice
+        default: keep
+        options:
+          - keep
+          - conservative
+          - balanced
+          - growth
+      max_capital:
+        description: "Max capital in £ (leave blank = unchanged)"
+        default: ""
+      confirm_reset:
+        description: "Required for reset: type RESET"
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  control:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Apply control action
+        env:
+          ACTION: "${{ inputs.action }}"
+          RISK: "${{ inputs.risk_level }}"
+          CAPITAL: "${{ inputs.max_capital }}"
+          CONFIRM: "${{ inputs.confirm_reset }}"
+          BROKER_KEY: ${{ secrets.BROKER_KEY }}
+          REAL_MONEY_CONFIRM: ${{ secrets.REAL_MONEY_CONFIRM }}
+        run: node control.mjs
+
+      - name: Save results
+        run: |
+          git config user.name "pocketquant-bot"
+          git config user.email "actions@github.com"
+          git add data
+          if git diff --staged --quiet; then
+            echo "Nothing to save"
+          else
+            git commit -m "control: ${ACTION}"
+            git push
+          fi
