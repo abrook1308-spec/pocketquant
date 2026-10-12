@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0f17">
+<title>PocketQuant</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #0b0f17; color: #e6edf3; padding-bottom: 40px; }
+  .wrap { max-width: 520px; margin: 0 auto; padding: 14px; }
+  h1 { font-size: 20px; display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: #8b98a9; margin: 18px 0 8px; }
+  .sub { color: #8b98a9; font-size: 12px; margin-bottom: 12px; }
+  .card { background: #141b26; border: 1px solid #1f2a3a; border-radius: 14px; padding: 14px; margin-bottom: 10px; }
+  .pill { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; }
+  .pill.running { background: #0c2e1a; color: #4ade80; }
+  .pill.paused { background: #332a0c; color: #fbbf24; }
+  .pill.stopped { background: #2c0f14; color: #f87171; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .metric { background: #0f1521; border-radius: 10px; padding: 10px; }
+  .metric .label { color: #8b98a9; font-size: 11px; }
+  .metric .val { font-size: 17px; font-weight: 700; margin-top: 2px; }
+  .pos { color: #4ade80; } .neg { color: #f87171; }
+  .btna { display: block; text-align: center; text-decoration: none; border: 0; border-radius: 12px; padding: 13px; font-size: 15px; font-weight: 600; width: 100%; cursor: pointer; }
+  .btn-start { background: #16a34a; color: #fff; }
+  .btn-ghost { background: #1f2a3a; color: #cbd5e1; }
+  .btn-ghost.danger { color: #f87171; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; color: #8b98a9; font-weight: 500; padding: 6px 4px; border-bottom: 1px solid #1f2a3a; }
+  td { padding: 7px 4px; border-bottom: 1px solid #16202e; }
+  .signal { padding: 9px 0; border-bottom: 1px solid #16202e; font-size: 13px; }
+  .signal .d { color: #8b98a9; font-size: 11px; }
+  .banner { border-radius: 12px; padding: 12px; font-size: 13px; margin-bottom: 10px; display: none; }
+  .banner.warn { background: #332a0c; color: #fbbf24; display: block; }
+  .banner.err { background: #2c0f14; color: #f87171; display: block; }
+  .banner.ok { background: #0c2e1a; color: #4ade80; display: block; }
+  .paper { background: #0c2e1a; color: #4ade80; font-size: 12px; padding: 8px 12px; border-radius: 10px; margin-bottom: 10px; }
+  .foot { color: #6b7787; font-size: 11px; margin-top: 16px; line-height: 1.5; }
+  canvas { width: 100%; height: 160px; }
+  .dim { opacity: 0.45; pointer-events: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>📈 PocketQuant <span class="pill" id="statePill">…</span></h1>
+  <p class="sub">Automated ETF paper trading — the engine runs on GitHub Actions every weekday after the London close. Your phone can stay in your pocket.</p>
+  <div class="paper">🧪 PAPER TRADING — simulated money, no real funds at risk</div>
+  <div class="banner" id="banner"></div>
+
+  <h2>Account</h2>
+  <div class="card">
+    <div class="grid">
+      <div class="metric"><div class="label">Total balance</div><div class="val" id="mTotal">—</div></div>
+      <div class="metric"><div class="label">Available cash</div><div class="val" id="mCash">—</div></div>
+      <div class="metric"><div class="label">Invested now</div><div class="val" id="mInv">—</div></div>
+      <div class="metric"><div class="label">Fees paid</div><div class="val" id="mFees">—</div></div>
+      <div class="metric"><div class="label">Today P/L</div><div class="val" id="mDay">—</div></div>
+      <div class="metric"><div class="label">Overall P/L</div><div class="val" id="mAll">—</div></div>
+    </div>
+    <div style="height:10px"></div>
+    <canvas id="chart"></canvas>
+  </div>
+
+  <h2>Run &amp; controls</h2>
+  <div class="card">
+    <p class="sub" style="margin-bottom:8px">Buttons open your repo's <b>Actions</b> tab. Tap <b>Run workflow</b>, pick the option from the dropdown, tap the green button. Changes apply in ~1 minute; then refresh this page.</p>
+    <a class="btna btn-start dim" id="lnkRun" href="#">⚡ Run engine now</a>
+    <div class="row">
+      <a class="btna btn-ghost dim" id="lnkBt" href="#">📊 Run backtest</a>
+      <a class="btna btn-ghost dim" id="lnkCtl" href="#">⚙️ Controls</a>
+    </div>
+    <div style="height:8px"></div>
+    <p class="sub">Controls: start · pause · stop · 🚨 emergency stop · reset · risk level · real money. For a backtest: "Run engine now" → mode: <b>backtest</b> → Run workflow.</p>
+  </div>
+
+  <h2>Open positions</h2>
+  <div class="card" id="positions">—</div>
+
+  <h2>Recent trades</h2>
+  <div class="card" id="trades">No trades yet.</div>
+
+  <h2>Trading signals</h2>
+  <div class="card" id="signals">No signals yet.</div>
+
+  <h2>Backtest (real historical data)</h2>
+  <div class="card">
+    <p class="sub" id="btSummary">Run a backtest to test the strategy on ~3 years of real daily prices (fees + slippage included) and compare with buy-and-hold.</p>
+    <div id="btResult"></div>
+  </div>
+
+  <h2>Real money (Trading 212)</h2>
+  <div class="card">
+    <p class="sub">Status: <b id="rmStatus">DISABLED</b></p>
+    <p class="sub">Real-money trading is OFF and stays off. It only becomes possible after you add your Trading 212 API key as an Actions secret (orders + read permissions only — T212 keys cannot withdraw money), set the secret REAL_MONEY_CONFIRM, and run the Controls action "enable-real-money". Paper trade for at least a month first.</p>
+    <p class="sub" id="rmResult"></p>
+  </div>
+
+  <p class="foot" id="foot">—</p>
+</div>
+
+<script>
+var state = null;
+var bt = null;
+
+function money(v) { return '£' + (Math.round(v * 100) / 100).toFixed(2); }
+function pct(v) { return (v >= 0 ? '+' : '') + (Math.round(v * 100) / 100).toFixed(2) + '%'; }
+function cls(v) { return v >= 0 ? 'pos' : 'neg'; }
+
+function load() {
+  fetch('data/state.json?ts=' + Date.now()).then(function (r) {
+    return r.ok ? r.json() : null;
+  }).then(function (st) {
+    if (!st) { setupMode(); return; }
+    state = st;
+    fetch('data/backtest.json?ts=' + Date.now()).then(function (r) {
+      return r.ok ? r.json() : null;
+    }).then(function (b) {
+      bt = (b && b.ok) ? b : null;
+      render();
+    }).catch(function () { render(); });
+  }).catch(function () { setupMode(); });
+}
+
+function setupMode() {
+  var banner = document.getElementById('banner');
+  banner.className = 'banner warn';
+  banner.innerHTML = '⏳ <b>No engine data yet.</b> First run: open your repo in GitHub → <b>Actions</b> tab → enable workflows if asked → <b>PocketQuant Engine</b> → <b>Run workflow</b> → Run. Then come back and refresh this page.';
+}
+
+function repo() {
+  return (state && state.meta && state.meta.repo) ? state.meta.repo : null;
+}
+function wfUrl(name) {
+  var r = repo();
+  return r ? 'https://github.com/' + r + '/actions/workflows/' + name : null;
+}
+function setLink(id, url) {
+  var el = document.getElementById(id);
+  if (url) { el.href = url; el.classList.remove('dim'); el.target = '_blank'; el.rel = 'noopener'; }
+  else { el.href = '#'; el.classList.add('dim'); }
+}
+
+function render() {
+  var s = state;
+  var pill = document.getElementById('statePill');
+  pill.textContent = s.settings.state.toUpperCase();
+  pill.className = 'pill ' + s.settings.state;
+
+  var banner = document.getElementById('banner');
+  if (s.settings.emergency) {
+    banner.className = 'banner err';
+    banner.textContent = '🚨 EMERGENCY STOP is active. Real money (if ever enabled) is off. Use Controls → start to resume.';
+  } else if (s.meta.haltReason) {
+    banner.className = 'banner warn';
+    banner.textContent = '⚠ ' + s.meta.haltReason + ' — use Controls → start to resume when ready.';
+  } else if (s.meta.lastError) {
+    banner.className = 'banner warn';
+    banner.textContent = '⚠ Last engine error: ' + s.meta.lastError;
+  } else {
+    banner.className = 'banner';
+  }
+
+  setLink('lnkRun', wfUrl('engine.yml'));
+  setLink('lnkBt', wfUrl('engine.yml'));
+  setLink('lnkCtl', wfUrl('control.yml'));
+
+  var cash = s.account.cash;
+  var inv = 0;
+  Object.keys(s.positions).forEach(function (t) {
+    var p = s.positions[t];
+    var pxv = (s.account.lastPx && s.account.lastPx[t]) || p.entryPrice;
+    inv += p.qty * pxv;
+  });
+  var tot = cash + inv;
+  var dayPl = s.day && s.day.startEquity ? tot - s.day.startEquity : 0;
+  var allPl = tot - s.account.startingEquity;
+
+  document.getElementById('mTotal').textContent = money(tot);
+  document.getElementById('mCash').textContent = money(cash);
+  document.getElementById('mInv').textContent = money(inv);
+  document.getElementById('mFees').textContent = money(s.account.totalFees);
+  var d = document.getElementById('mDay');
+  d.textContent = (dayPl >= 0 ? '+' : '') + money(dayPl); d.className = 'val ' + cls(dayPl);
+  var a = document.getElementById('mAll');
+  a.textContent = (allPl >= 0 ? '+' : '') + money(allPl) + ' (' + pct(allPl / s.account.startingEquity * 100) + ')';
+  a.className = 'val ' + cls(allPl);
+
+  document.getElementById('rmStatus').textContent = s.settings.realMoney
+    ? 'ENABLED (mirror orders to Trading 212)'
+    : 'DISABLED';
+  var bc = s.meta.brokerCheck;
+  document.getElementById('rmResult').textContent = bc
+    ? (bc.ok ? '✔ ' : '✖ ') + 'Last broker check (' + (bc.at ? new Date(bc.at).toLocaleString('en-GB') : '') + '): ' + bc.message
+    : '';
+
+  document.getElementById('foot').textContent =
+    'Engine last run: ' + (s.meta.lastRunAt ? new Date(s.meta.lastRunAt).toLocaleString('en-GB') : 'never') +
+    ' · Next automatic run: weekdays ~17:23 UTC (GitHub Actions; may start a little late — harmless, it uses the day\'s closing prices) · ' +
+    'Data: Yahoo Finance (free, unofficial) with Stooq backup · Hosting: GitHub Pages, £0 · ' +
+    'This page is public (needed for free hosting) — it contains only paper-trading results, no personal data. ' +
+    'Capital at risk when real money is enabled; risk limits and stop-losses reduce but cannot guarantee losses.';
+
+  var pos = document.getElementById('positions');
+  var keys = Object.keys(s.positions).filter(function (t) { return s.positions[t].qty > 0; });
+  if (!keys.length) { pos.textContent = 'All cash — no open position.'; }
+  else {
+    var h = '<table><tr><th>ETF</th><th>Units</th><th>Entry</th><th>Now</th><th>P/L</th></tr>';
+    keys.forEach(function (t) {
+      var p = s.positions[t];
+      var pxv = (s.account.lastPx && s.account.lastPx[t]) || p.entryPrice;
+      var pl = p.qty * (pxv - p.entryPrice);
+      h += '<tr><td>' + t + '</td><td>' + p.qty.toFixed(4) + '</td><td>' + money(p.entryPrice) +
+           '</td><td>' + money(pxv) + '</td><td class="' + cls(pl) + '">' + money(pl) + '</td></tr>';
+    });
+    pos.innerHTML = h + '</table>';
+  }
+
+  var tr = document.getElementById('trades');
+  if (!s.trades.length) { tr.textContent = 'No trades yet.'; }
+  else {
+    var h2 = '<table><tr><th>Date</th><th>ETF</th><th>Side</th><th>Value</th><th>Fee</th><th>P/L</th></tr>';
+    s.trades.slice(0, 15).forEach(function (t) {
+      h2 += '<tr><td>' + t.date + '</td><td>' + t.ticker + '</td><td>' + t.side + '</td><td>' +
+            money(t.value) + '</td><td>' + money(t.fee) + '</td><td>' +
+            (t.pnl == null ? '—' : '<span class="' + cls(t.pnl) + '">' + money(t.pnl) + '</span>') + '</td></tr>';
+    });
+    tr.innerHTML = h2 + '</table>';
+  }
+
+  var sg = document.getElementById('signals');
+  if (!s.signals.length) { sg.textContent = 'No signals yet. Use "Run engine now" (Actions tab) to start.'; }
+  else {
+    var h3 = '';
+    s.signals.slice(0, 15).forEach(function (x) {
+      h3 += '<div class="signal"><span class="d">' + x.date + '</span> · <b>' + x.action + '</b> ' +
+            (x.ticker || '') + ' — ' + x.reason + '</div>';
+    });
+    sg.innerHTML = h3;
+  }
+
+  drawChart(s.equity);
+  if (bt) renderBacktest(bt); else document.getElementById('btResult').textContent = '';
+}
+
+function drawChart(eq) {
+  var c = document.getElementById('chart');
+  if (!eq || eq.length < 2) return;
+  var dpr = window.devicePixelRatio || 1;
+  var w = c.clientWidth, h = 160;
+  c.width = w * dpr; c.height = h * dpr;
+  var ctx = c.getContext('2d');
+  ctx.scale(dpr, dpr);
+  var vals = eq.map(function (p) { return p.v; });
+  var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
+  if (max === min) { max = min + 1; }
+  var pad = (max - min) * 0.1;
+  min -= pad; max += pad;
+  ctx.clearRect(0, 0, w, h);
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  for (var g = 1; g < 4; g++) { ctx.beginPath(); ctx.moveTo(0, h * g / 4); ctx.lineTo(w, h * g / 4); ctx.stroke(); }
+  var up = vals[vals.length - 1] >= vals[0];
+  var col = up ? '#22c55e' : '#ef4444';
+  ctx.beginPath();
+  eq.forEach(function (p, i) {
+    var x = i / (eq.length - 1) * w;
+    var y = h - (p.v - min) / (max - min) * h;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke();
+  ctx.lineTo(w, h); ctx.lineTo(0, h); ctx.closePath();
+  var grad = ctx.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, up ? 'rgba(34,197,94,0.25)' : 'rgba(239,68,68,0.25)');
+  grad.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = grad; ctx.fill();
+  ctx.fillStyle = '#8b98a9'; ctx.font = '10px sans-serif';
+  ctx.fillText('£' + vals[0].toFixed(2) + ' → £' + vals[vals.length - 1].toFixed(2), 6, 12);
+}
+
+function renderBacktest(b) {
+  document.getElementById('btSummary').textContent =
+    'Real daily prices ' + b.period.from + ' → ' + b.period.to + ' (' + b.period.bars + ' days). ' +
+    'Signals at close, executed next day. Fees + slippage included.';
+  var h = '<table><tr><th>Strategy</th><th>Return</th><th>Max DD</th><th>Trades</th><th>Fees</th></tr>';
+  b.strategy.forEach(function (x) {
+    h += '<tr><td>' + x.riskLevel + '</td><td class="' + cls(x.returnPct) + '">' + pct(x.returnPct) +
+         '</td><td>-' + x.maxDrawdownPct + '%</td><td>' + x.trades + '</td><td>' + money(x.feesGBP) + '</td></tr>';
+  });
+  h += '</table><div style="height:6px"></div><table><tr><th>Buy &amp; hold</th><th>Return</th><th>Max DD</th></tr>';
+  b.buyAndHold.forEach(function (x) {
+    h += '<tr><td>' + x.ticker + '</td><td class="' + cls(x.returnPct) + '">' + pct(x.returnPct) +
+         '</td><td>-' + x.maxDrawdownPct + '%</td></tr>';
+  });
+  document.getElementById('btResult').innerHTML = h + '</table>';
+}
+
+load();
+setInterval(load, 60000);
+</script>
+</body>
+</html>
