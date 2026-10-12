@@ -1,6 +1,6 @@
 {
   "settings": {
-    "state": "stopped",
+    "state": "running",
     "emergency": false,
     "riskLevel": "balanced",
     "maxCapital": 50,
