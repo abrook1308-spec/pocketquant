@@ -1,0 +1,37 @@
+{
+  "settings": {
+    "state": "stopped",
+    "emergency": false,
+    "riskLevel": "balanced",
+    "maxCapital": 50,
+    "realMoney": false,
+    "createdAt": "2026-10-12T22:04:07.507Z"
+  },
+  "account": {
+    "cash": 50,
+    "startingEquity": 50,
+    "peakEquity": 50,
+    "totalFees": 0,
+    "lastPx": {},
+    "equityNow": 50
+  },
+  "positions": {},
+  "trades": [],
+  "signals": [],
+  "equity": [],
+  "day": {
+    "date": null,
+    "startEquity": 50
+  },
+  "meta": {
+    "lastEvalDate": null,
+    "lastRunAt": "2026-10-12T22:04:07.508Z",
+    "lastError": null,
+    "consecutiveFails": 0,
+    "haltReason": null,
+    "brokerCheck": null,
+    "tradeKeys": [],
+    "version": 1,
+    "repo": "abrook1308-spec/pocketquant"
+  }
+}
