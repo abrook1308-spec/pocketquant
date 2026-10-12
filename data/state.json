@@ -8,29 +8,69 @@
     "createdAt": "2026-10-12T22:04:07.507Z"
   },
   "account": {
-    "cash": 50,
+    "cash": 10,
     "startingEquity": 50,
     "peakEquity": 50,
-    "totalFees": 0,
-    "lastPx": {},
+    "totalFees": 0.04,
+    "lastPx": {
+      "VUSA.L": 112.01499938964844,
+      "VWRL.L": 141.6300048828125,
+      "CSPX.L": 842.47998046875,
+      "VGOV.L": 15.133999824523926
+    },
     "equityNow": 50
   },
-  "positions": {},
-  "trades": [],
-  "signals": [],
-  "equity": [],
+  "positions": {
+    "VUSA.L": {
+      "qty": 0.3563815572699903,
+      "entryPrice": 112.12701438903807,
+      "entryDate": "2026-10-12",
+      "costBasis": 40
+    }
+  },
+  "trades": [
+    {
+      "id": "2026-10-12|VUSA.L|BUY",
+      "date": "2026-10-12",
+      "ticker": "VUSA.L",
+      "side": "BUY",
+      "qty": 0.3563815572699903,
+      "price": 112.13,
+      "fee": 0.04,
+      "value": 40,
+      "pnl": null,
+      "reason": "Buy VUSA.L — above 200-day trend, momentum 5.2%"
+    }
+  ],
+  "signals": [
+    {
+      "date": "2026-10-12",
+      "action": "BUY",
+      "ticker": "VUSA.L",
+      "reason": "Buy VUSA.L — above 200-day trend, momentum 5.2%",
+      "price": 112.01499938964844
+    }
+  ],
+  "equity": [
+    {
+      "d": "2026-10-12",
+      "v": 50
+    }
+  ],
   "day": {
-    "date": null,
+    "date": "2026-10-12",
     "startEquity": 50
   },
   "meta": {
-    "lastEvalDate": null,
-    "lastRunAt": "2026-10-12T22:04:07.508Z",
+    "lastEvalDate": "2026-10-12",
+    "lastRunAt": "2026-10-12T22:11:46.894Z",
     "lastError": null,
     "consecutiveFails": 0,
     "haltReason": null,
     "brokerCheck": null,
-    "tradeKeys": [],
+    "tradeKeys": [
+      "2026-10-12|VUSA.L|BUY"
+    ],
     "version": 1,
     "repo": "abrook1308-spec/pocketquant"
   }
