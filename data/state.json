@@ -13,12 +13,12 @@
     "peakEquity": 50,
     "totalFees": 0.04,
     "lastPx": {
-      "VUSA.L": 110.45500183105469,
-      "VWRL.L": 139.5800018310547,
-      "CSPX.L": 833.5999755859375,
-      "VGOV.L": 15.17199993133545
+      "VUSA.L": 109.65750122070312,
+      "VWRL.L": 138.77999877929688,
+      "CSPX.L": 832.989990234375,
+      "VGOV.L": 15.199000358581543
     },
-    "equityNow": 49.364125560810905
+    "equityNow": 49.07991105137005
   },
   "positions": {
     "VUSA.L": {
@@ -43,6 +43,13 @@
     }
   ],
   "signals": [
+    {
+      "date": "2026-10-16",
+      "action": "HOLD",
+      "ticker": "VUSA.L",
+      "reason": "Hold VUSA.L (above trend, momentum 4.4%)",
+      "price": 109.65750122070312
+    },
     {
       "date": "2026-10-15",
       "action": "HOLD",
@@ -88,15 +95,19 @@
     {
       "d": "2026-10-15",
       "v": 49.36
+    },
+    {
+      "d": "2026-10-16",
+      "v": 49.08
     }
   ],
   "day": {
-    "date": "2026-10-15",
-    "startEquity": 49.364125560810905
+    "date": "2026-10-16",
+    "startEquity": 49.07991105137005
   },
   "meta": {
-    "lastEvalDate": "2026-10-15",
-    "lastRunAt": "2026-10-15T17:51:20.225Z",
+    "lastEvalDate": "2026-10-16",
+    "lastRunAt": "2026-10-16T17:51:14.052Z",
     "lastError": null,
     "consecutiveFails": 0,
     "haltReason": null,
