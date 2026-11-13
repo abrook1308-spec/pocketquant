@@ -8,27 +8,51 @@
     "createdAt": "2026-10-12T22:04:07.507Z"
   },
   "account": {
-    "cash": 9.569461287844256,
+    "cash": 9.480279329890578,
     "startingEquity": 50,
     "peakEquity": 50,
-    "totalFees": 0.11646748903577722,
+    "totalFees": 0.19256274012725422,
     "lastPx": {
-      "VUSA.L": 109.3324966430664,
-      "VWRL.L": 138.36000061035156,
-      "CSPX.L": 823.989990234375,
-      "VGOV.L": 15.326000213623047
+      "VUSA.L": 108.01750183105469,
+      "VWRL.L": 136.97000122070312,
+      "CSPX.L": 813.4099731445312,
+      "VGOV.L": 15.270000457763672
     },
-    "equityNow": 47.73094533230961
+    "equityNow": 47.59150687740068
   },
   "positions": {
-    "VGOV.L": {
-      "qty": 2.489983264553539,
-      "entryPrice": 15.418402877807615,
-      "entryDate": "2026-11-10",
-      "costBasis": 38.4299951270121
+    "VUSA.L": {
+      "qty": 0.35176832010693027,
+      "entryPrice": 108.12551933288573,
+      "entryDate": "2026-11-13",
+      "costBasis": 38.07320550192055
     }
   },
   "trades": [
+    {
+      "id": "2026-11-13|VUSA.L|BUY",
+      "date": "2026-11-13",
+      "ticker": "VUSA.L",
+      "side": "BUY",
+      "qty": 0.35176832010693027,
+      "price": 108.13,
+      "fee": 0.04,
+      "value": 38.07,
+      "pnl": null,
+      "reason": "Trend exit VGOV.L (price below 200-day average) → switch to VUSA.L"
+    },
+    {
+      "id": "2026-11-13|VGOV.L|SELL",
+      "date": "2026-11-13",
+      "ticker": "VGOV.L",
+      "side": "SELL",
+      "qty": 2.489983264553539,
+      "price": 15.270000457763672,
+      "fee": 0.04,
+      "value": 38.02,
+      "pnl": -0.41,
+      "reason": "Trend exit VGOV.L (price below 200-day average) → switch to VUSA.L"
+    },
     {
       "id": "2026-11-10|VGOV.L|BUY",
       "date": "2026-11-10",
@@ -67,6 +91,13 @@
     }
   ],
   "signals": [
+    {
+      "date": "2026-11-13",
+      "action": "BUY",
+      "ticker": "VUSA.L",
+      "reason": "Trend exit VGOV.L (price below 200-day average) → switch to VUSA.L",
+      "price": 108.01750183105469
+    },
     {
       "date": "2026-11-12",
       "action": "HOLD",
@@ -321,15 +352,19 @@
     {
       "d": "2026-11-12",
       "v": 47.73
+    },
+    {
+      "d": "2026-11-13",
+      "v": 47.59
     }
   ],
   "day": {
-    "date": "2026-11-12",
-    "startEquity": 47.73094533230961
+    "date": "2026-11-13",
+    "startEquity": 47.59150687740068
   },
   "meta": {
-    "lastEvalDate": "2026-11-12",
-    "lastRunAt": "2026-11-12T22:46:41.198Z",
+    "lastEvalDate": "2026-11-13",
+    "lastRunAt": "2026-11-13T22:42:56.154Z",
     "lastError": null,
     "consecutiveFails": 0,
     "haltReason": null,
@@ -337,7 +372,9 @@
     "tradeKeys": [
       "2026-10-12|VUSA.L|BUY",
       "2026-11-10|VUSA.L|SELL",
-      "2026-11-10|VGOV.L|BUY"
+      "2026-11-10|VGOV.L|BUY",
+      "2026-11-13|VGOV.L|SELL",
+      "2026-11-13|VUSA.L|BUY"
     ],
     "version": 1,
     "repo": "abrook1308-spec/pocketquant"
