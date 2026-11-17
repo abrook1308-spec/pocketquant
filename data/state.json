@@ -18,7 +18,7 @@
       "CSPX.L": 813.4099731445312,
       "VGOV.L": 15.270000457763672
     },
-    "equityNow": 47.59150687740068
+    "equityNow": 47.47741449114795
   },
   "positions": {
     "VUSA.L": {
@@ -91,6 +91,13 @@
     }
   ],
   "signals": [
+    {
+      "date": "2026-11-17",
+      "action": "HOLD",
+      "ticker": "VUSA.L",
+      "reason": "Hold VUSA.L (above trend, momentum -0.4%)",
+      "price": 108.01750183105469
+    },
     {
       "date": "2026-11-13",
       "action": "BUY",
@@ -356,15 +363,19 @@
     {
       "d": "2026-11-13",
       "v": 47.59
+    },
+    {
+      "d": "2026-11-17",
+      "v": 47.48
     }
   ],
   "day": {
-    "date": "2026-11-13",
-    "startEquity": 47.59150687740068
+    "date": "2026-11-17",
+    "startEquity": 47.47741449114795
   },
   "meta": {
-    "lastEvalDate": "2026-11-13",
-    "lastRunAt": "2026-11-13T22:42:56.154Z",
+    "lastEvalDate": "2026-11-17",
+    "lastRunAt": "2026-11-17T00:53:19.100Z",
     "lastError": null,
     "consecutiveFails": 0,
     "haltReason": null,
