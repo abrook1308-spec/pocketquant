@@ -18,7 +18,7 @@
       "CSPX.L": 762.4000244140625,
       "VGOV.L": 15.321000099182129
     },
-    "equityNow": 45.442433471115294
+    "equityNow": 45.333836058678585
   },
   "positions": {
     "VGOV.L": {
@@ -115,6 +115,13 @@
     }
   ],
   "signals": [
+    {
+      "date": "2026-11-24",
+      "action": "HOLD",
+      "ticker": "VGOV.L",
+      "reason": "Hold VGOV.L (above trend, momentum 0.9%)",
+      "price": 15.321000099182129
+    },
     {
       "date": "2026-11-20",
       "action": "BUY",
@@ -424,15 +431,19 @@
     {
       "d": "2026-11-20",
       "v": 45.44
+    },
+    {
+      "d": "2026-11-24",
+      "v": 45.33
     }
   ],
   "day": {
-    "date": "2026-11-20",
-    "startEquity": 45.442433471115294
+    "date": "2026-11-24",
+    "startEquity": 45.333836058678585
   },
   "meta": {
-    "lastEvalDate": "2026-11-20",
-    "lastRunAt": "2026-11-20T23:11:58.304Z",
+    "lastEvalDate": "2026-11-24",
+    "lastRunAt": "2026-11-24T03:22:53.112Z",
     "lastError": null,
     "consecutiveFails": 0,
     "haltReason": null,
