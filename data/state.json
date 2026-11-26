@@ -13,12 +13,12 @@
     "peakEquity": 50,
     "totalFees": 0.2648788410453712,
     "lastPx": {
-      "VUSA.L": 105.72750091552734,
-      "VWRL.L": 133.47999572753906,
-      "CSPX.L": 783.6099853515625,
-      "VGOV.L": 15.354000091552734
+      "VUSA.L": 103.58999633789062,
+      "VWRL.L": 130.89999389648438,
+      "CSPX.L": 773.3900146484375,
+      "VGOV.L": 15.371000289916992
     },
-    "equityNow": 45.411982589293984
+    "equityNow": 45.45224037199346
   },
   "positions": {
     "VGOV.L": {
@@ -115,6 +115,13 @@
     }
   ],
   "signals": [
+    {
+      "date": "2026-11-26",
+      "action": "HOLD",
+      "ticker": "VGOV.L",
+      "reason": "Hold VGOV.L (above trend, momentum 0.9%)",
+      "price": 15.371000289916992
+    },
     {
       "date": "2026-11-25",
       "action": "HOLD",
@@ -446,15 +453,19 @@
     {
       "d": "2026-11-25",
       "v": 45.41
+    },
+    {
+      "d": "2026-11-26",
+      "v": 45.45
     }
   ],
   "day": {
-    "date": "2026-11-25",
-    "startEquity": 45.411982589293984
+    "date": "2026-11-26",
+    "startEquity": 45.45224037199346
   },
   "meta": {
-    "lastEvalDate": "2026-11-25",
-    "lastRunAt": "2026-11-25T01:28:21.996Z",
+    "lastEvalDate": "2026-11-26",
+    "lastRunAt": "2026-11-26T01:02:18.618Z",
     "lastError": null,
     "consecutiveFails": 0,
     "haltReason": null,
